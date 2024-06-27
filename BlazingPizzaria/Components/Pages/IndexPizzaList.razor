@@ -1,0 +1,49 @@
+@page "/"
+@inject IProdutoServices pizzaServices
+<PageTitle>Blazing Pizza</PageTitle>
+<div class="main">
+    <div style="float:right;width:70%; text-decoration-color:inherit">
+        <div class="col-sm-10" style="float:left">
+            <input class="form-control" type="text" placeholder="Filtrar pizza" @bind="@Filter" @oninput="FilterPizza" style="background-color: #ffffff; color: black;" />
+        </div>
+    </div>
+    <h1>Pizzas</h1>
+    <ul class="pizza-cards">
+        @if (specials != null)
+        {
+            @foreach (var special in specials)
+            {
+                <li style="background-image: url('@special.Imagem.Url')">
+                    <div class="pizza-info">
+                        <span class="title">@special.Nome</span>
+                        @special.Descricao
+                        <span class="price">@special.Preco</span>
+                    </div>
+                </li>
+            }
+        }
+    </ul>
+</div>
+@code {
+    private string Filter;
+    private IEnumerable<ProdutoDtos> specials { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        specials = await pizzaServices.GetItens();   
+    }
+
+    protected async Task FilterPizza(ChangeEventArgs e)
+    {
+        Filter = e.Value.ToString();
+
+        await OnInitializedAsync();
+
+        if (Filter != null)
+        {
+            specials = specials.Where(s => s.Nome.Contains(Filter, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+    }
+ }
+
