@@ -9,9 +9,9 @@
     </div>
     <h1>Pizzas</h1>
     <ul class="pizza-cards">
-        @if (specials != null)
+        @if (produtos != null)
         {
-            @foreach (var special in specials)
+            @foreach (var special in produtos)
             {
                 <li style="background-image: url('@special.Imagem.Url')">
                     <div class="pizza-info">
@@ -26,23 +26,54 @@
 </div>
 @code {
     private string Filter;
-    private IEnumerable<ProdutoDtos> specials { get; set; }
+    private IEnumerable<ProdutoDtos> produtos { get; set; }
+
+    [Inject]
+    public IGerenciaProdutosLocalStorageService gerenciaProdutosLocalStorageService { get; set; } 
 
     protected override async Task OnInitializedAsync()
     {
+        StateHasChanged();
+    }
 
-        specials = await pizzaServices.GetItens();   
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (produtos is null)
+        {
+            await LimpaLocalStorage();
+            produtos = await gerenciaProdutosLocalStorageService.GetCollectionItem();
+            StateHasChanged();
+        }
+        else
+        {
+            produtos = await gerenciaProdutosLocalStorageService.GetCollectionItem();
+        }
     }
 
     protected async Task FilterPizza(ChangeEventArgs e)
     {
         Filter = e.Value.ToString();
 
-        await OnInitializedAsync();
-
         if (Filter != null)
         {
-            specials = specials.Where(s => s.Nome.Contains(Filter, StringComparison.OrdinalIgnoreCase)).ToList();
+            produtos = produtos.Where(s => s.Nome.Contains(Filter, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+        StateHasChanged();
+    }
+
+    private async Task LimpaLocalStorage()
+    {
+        try
+        {
+       
+                await gerenciaProdutosLocalStorageService.RemoveCollectionItem();
+             
+            
+        }
+        catch (Exception ex)
+        {
+            // Log or handle the exception as needed
+            Console.WriteLine($"Error removing item from local storage: {ex.Message}");
         }
     }
  }

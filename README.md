@@ -30,8 +30,10 @@ Foi adicionado um projeto de API em .NET 8.0, que é consumido pelo site Blazor.
 
 ### 📖 Próximas Releases
 
-1. **Páginas de Bebidas:**
-   - Adicionar funcionalidades para listar e gerenciar as bebidas disponíveis.
+1. **Páginas de Pizza List:**
+   - Explorando mais a fundo questões de armazenamento em cache do navegador.
+   - Adicionar criptografia no localStorage para os dados do produto usando System.Security.Cryptography   (Aprendendo questões de criptografia).
+   - Cria uma politica de testes unitarios e dos componentes da pagina.
 
 2. **Cadastro de Usuário:**
    - Implementar a página de cadastro de usuário para facilitar o processo de compra.

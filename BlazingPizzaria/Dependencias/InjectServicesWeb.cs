@@ -1,6 +1,9 @@
 ﻿
+using BlazingPizza.Repositories.Interface.LocalCache.StorageCahceServices;
 using BlazingPizzaria.Models.DTOs;
+using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.JSInterop;
 using Radzen;
 
@@ -11,11 +14,12 @@ namespace BlazingPizza.Dependencias
     /// </summary>
     public partial class InjectServicesWeb
     {
+       
+
+
         public readonly ILogger<ProdutoDtos> _logger;
 
         public HttpClient _httpClient { get; set; }
-
-        public readonly IJSRuntime _jSRuntime;
 
         [Inject]
         public NavigationManager _navigationManager { get; set; }
@@ -33,7 +37,7 @@ namespace BlazingPizza.Dependencias
         public NotificationService _notificationService { get; set; }
 
 
-        public InjectServicesWeb(ILogger<ProdutoDtos> Logger, HttpClient HttpClient, IJSRuntime JSRuntime,
+        public InjectServicesWeb(ILogger<ProdutoDtos> Logger, HttpClient HttpClient,
             NavigationManager NavigationManager)
         {
             _logger = Logger;
