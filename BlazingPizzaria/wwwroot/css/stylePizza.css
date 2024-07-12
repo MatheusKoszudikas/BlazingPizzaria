@@ -1,4 +1,15 @@
-﻿
+﻿.pizza-left {
+    display: flex;
+    justify-content: left, right;
+    align-items: center;
+    height: 100vh;
+}
+.pizza-filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
 .pizza-cards {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));

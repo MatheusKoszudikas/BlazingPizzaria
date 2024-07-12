@@ -1,4 +1,5 @@
 ﻿using BlazingPizza.Api.Entites;
+using BlazingPizzaria.Models.DTOs;
 
 namespace BlazingPizza.Api.Repositories.Interface
 {
@@ -7,5 +8,7 @@ namespace BlazingPizza.Api.Repositories.Interface
         Task<Produto?> GetItem(int id);
         Task<IEnumerable<Produto?>> GetItens();
         Task<IEnumerable<Categoria?>> GetItensPorCategorias(int id);
+
+
     }
 }

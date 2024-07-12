@@ -1,17 +1,34 @@
 @page "/"
 @inject IProdutoServices pizzaServices
+@inject InjectServicesWeb injectServicesWeb
 <PageTitle>Blazing Pizza</PageTitle>
 <div class="main">
-    <div style="float:right;width:70%; text-decoration-color:inherit">
-        <div class="col-sm-10" style="float:left">
-            <input class="form-control" type="text" placeholder="Filtrar pizza" @bind="@Filter" @oninput="FilterPizza" style="background-color: #ffffff; color: black;" />
-        </div>
+    <div class="pizza-left" style="height: 20px">
+        <h1>Pizzas</h1>
     </div>
-    <h1>Pizzas</h1>
+        <div class="pizza-filter" style="height: 57px">
+            <RadzenCard Style="height: 49px; width: 798px">
+            <RadzenTextBox @oninput=@(args => FilterPizza(args.Value.ToString())) class="w-100" aria-label="TextBox with placeholder" Style="width: 205px" />
+            </RadzenCard> 
+            <RadzenProfileMenu Style="width: 65px">
+                <Template>
+                    <RadzenGravatar Email="">
+                    </RadzenGravatar>
+                </Template>
+                <ChildContent>
+                <RadzenRadioButtonList @bind-Value="@SelectValue" TValue="int" Change="@SelectFilter" Orientation="Orientation.Vertical" class="mb-5">
+                        <Items>
+                            <RadzenRadioButtonListItem Text="Nome" Value="1" />
+                            <RadzenRadioButtonListItem Text="Preço" Value="2" />
+                        </Items>
+                    </RadzenRadioButtonList>
+                </ChildContent>
+            </RadzenProfileMenu>
+       </div>
     <ul class="pizza-cards">
-        @if (produtos != null)
+        @if (produtosFiltro != null)
         {
-            @foreach (var special in produtos)
+            @foreach (var special in produtosFiltro)
             {
                 <li style="background-image: url('@special.Imagem.Url')">
                     <div class="pizza-info">
@@ -25,55 +42,42 @@
     </ul>
 </div>
 @code {
-    private string Filter;
+    private int SelectValue = 1;
     private IEnumerable<ProdutoDtos> produtos { get; set; }
+    private IEnumerable<ProdutoDtos> produtosFiltro { get; set; }
 
-    [Inject]
-    public IGerenciaProdutosLocalStorageService gerenciaProdutosLocalStorageService { get; set; } 
 
     protected override async Task OnInitializedAsync()
     {
-        StateHasChanged();
+        produtos = await pizzaServices.GetItens();
+        produtosFiltro = produtos;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (produtos is null)
+        produtosFiltro = produtos;
+    }
+
+    protected async Task FilterPizza(string nome)
+    {
+        await OnAfterRenderAsync(true);
+
+        if (nome != null)
         {
-            await LimpaLocalStorage();
-            produtos = await gerenciaProdutosLocalStorageService.GetCollectionItem();
+            produtosFiltro = produtosFiltro.Where(s => s.Nome.Contains(nome, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            SelectValue = 1;
+        }
+    }
+
+    protected async Task SelectFilter()
+    {
+        await OnAfterRenderAsync(true);
+
+        if (SelectValue == 2)
+        {
+            produtosFiltro = produtosFiltro.OrderBy(o => o.Preco).ToList();
             StateHasChanged();
-        }
-        else
-        {
-            produtos = await gerenciaProdutosLocalStorageService.GetCollectionItem();
-        }
-    }
-
-    protected async Task FilterPizza(ChangeEventArgs e)
-    {
-        Filter = e.Value.ToString();
-
-        if (Filter != null)
-        {
-            produtos = produtos.Where(s => s.Nome.Contains(Filter, StringComparison.OrdinalIgnoreCase)).ToList();
-        }
-        StateHasChanged();
-    }
-
-    private async Task LimpaLocalStorage()
-    {
-        try
-        {
-       
-                await gerenciaProdutosLocalStorageService.RemoveCollectionItem();
-             
-            
-        }
-        catch (Exception ex)
-        {
-            // Log or handle the exception as needed
-            Console.WriteLine($"Error removing item from local storage: {ex.Message}");
         }
     }
  }

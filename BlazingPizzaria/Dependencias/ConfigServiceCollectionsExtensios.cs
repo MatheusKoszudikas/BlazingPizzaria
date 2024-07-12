@@ -1,4 +1,5 @@
-﻿using BlazingPizza.Repositories.Interface;
+﻿using BlazingPizza.Api.Repositories.Security;
+using BlazingPizza.Repositories.Interface;
 using BlazingPizza.Repositories.Interface.LocalCache.StorageCahceServices;
 using BlazingPizza.Repositories.Services;
 using BlazingPizza.Repositories.Services.LocalCache.StorageCahceServices;
@@ -17,7 +18,7 @@ namespace BlazingPizza.Dependencias
             Services.AddScoped<IProdutoServices, ProdutoServices>();
             Services.AddBlazoredLocalStorage();
 
-            var baseUrl = "http://localhost:5206";
+            var baseUrl = "https://localhost:7007";
 
             Services.AddScoped(HttpClient => new HttpClient
             {

@@ -1,8 +1,10 @@
 ﻿using BlazingPizza.Api.Dependencias;
 using BlazingPizza.Api.Entites;
 using BlazingPizza.Api.Repositories.Interface;
+using BlazingPizza.Api.Repositories.Security;
 using BlazingPizzaria.Models.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace BlazingPizza.Api.Controllers
 {
@@ -14,10 +16,14 @@ namespace BlazingPizza.Api.Controllers
 
         private readonly InjectServicesApi _injectServices;
 
-        public ProdutosController(IProdutoRepository produtoRepository, InjectServicesApi injectServices)
+        public ProdutosController(IProdutoRepository produtoRepository, 
+            InjectServicesApi injectServices)
         {
+
+            _injectServices = injectServices;
             _produtoRepository = produtoRepository;
             _injectServices = injectServices;
+ 
         }
 
         [HttpGet]
@@ -31,7 +37,6 @@ namespace BlazingPizza.Api.Controllers
                     return NotFound("Nenhum produto foi localizado");
                 }
                 var produtoDtos = _injectServices._mapper.Map<List<ProdutoDtos>>(produtos);
-          
                 return Ok(produtoDtos);
             }
             catch (Exception)

@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\npm package\**" />
+    <Compile Remove="wwwroot\Package npm node.js\**" />
+    <Content Remove="wwwroot\npm package\**" />
+    <Content Remove="wwwroot\Package npm node.js\**" />
+    <EmbeddedResource Remove="wwwroot\npm package\**" />
+    <EmbeddedResource Remove="wwwroot\Package npm node.js\**" />
+    <None Remove="wwwroot\npm package\**" />
+    <None Remove="wwwroot\Package npm node.js\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\stylePizzacss.css" />
   </ItemGroup>
 

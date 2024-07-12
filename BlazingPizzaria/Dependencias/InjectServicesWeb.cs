@@ -15,7 +15,7 @@ namespace BlazingPizza.Dependencias
     public partial class InjectServicesWeb
     {
        
-
+        public readonly IJSRuntime _jSRuntime;
 
         public readonly ILogger<ProdutoDtos> _logger;
 
@@ -37,9 +37,10 @@ namespace BlazingPizza.Dependencias
         public NotificationService _notificationService { get; set; }
 
 
-        public InjectServicesWeb(ILogger<ProdutoDtos> Logger, HttpClient HttpClient,
+        public InjectServicesWeb(IJSRuntime IJSRuntime,ILogger<ProdutoDtos> Logger, HttpClient HttpClient,
             NavigationManager NavigationManager)
         {
+            _jSRuntime = IJSRuntime;
             _logger = Logger;
             _httpClient = HttpClient;
             _navigationManager = NavigationManager;

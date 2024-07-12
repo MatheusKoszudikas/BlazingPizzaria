@@ -2,6 +2,7 @@
 using BlazingPizza.Api.Entites;
 using BlazingPizza.Api.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace BlazingPizza.Api.Repositories.Services
 {
@@ -38,6 +39,7 @@ namespace BlazingPizza.Api.Repositories.Services
                                       .ThenInclude(p => p.Revisao)
                             .Include(p => p.Atributos)
                             .Include(a => a.Imagem).ToListAsync();
+
             return produtosComDetalhes;
         }
         public async Task<Produto?> GetItem(int id)
